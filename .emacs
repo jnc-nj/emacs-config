@@ -61,10 +61,10 @@
   (auto-package-update-at-time "00:00"))
 
 (use-package beacon
-  :ensure t
-  :config
-  (beacon-mode 1)
-  (setq beacon-color "#72dfd9"))
+             :ensure t
+             :config
+             (beacon-mode 1)
+             (setq beacon-color "#72dfd9"))
 
 (use-package dashboard
   :ensure t
@@ -94,10 +94,10 @@
   (enable-theme 'dracula))
 
 (use-package elfeed
-  :ensure t
-  :bind (("C-x f" . elfeed))
-  :config
-  (setq elfeed-feeds '("http://xkcd.com/rss.xml")))
+             :ensure t
+             :bind (("C-x f" . elfeed))
+             :config
+             (setq elfeed-feeds '("http://xkcd.com/rss.xml")))
 
 (use-package elpy
   :ensure t
@@ -254,10 +254,13 @@
              (global-log4slime-mode 1))
 
 (use-package smartparens
+             :ensure t
              :config
              (smartparens-global-mode t)
              (smartparens-strict-mode t)
              (sp-pair "<" ">")
+             (sp-pair "+" "+")
+             (sp-pair "*" "*")
              (sp-pair "'" nil :actions :rem))
 
 (use-package smex
