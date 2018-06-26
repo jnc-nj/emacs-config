@@ -188,15 +188,14 @@
 
 (use-package paredit
              :ensure t
-             :bind (("M-<right>" . paredit-forward) 
-                    ("M-<left>" . paredit-backward) 
-                    ("C-k" . delete-region)
-                    ("C-x ." . paredit-wrap-round)
-                    ("C-x /" . paredit-meta-doublequote)
-                    ("M-]" . paredit-forward-barf-sexp)
-                    ("M-[" . paredit-backward-barf-sexp)
-                    ("M-}" . paredit-forward-slurp-sexp)
-                    ("M-{" . paredit-backward-slurp-sexp)))
+             :config
+             (define-portacle-key "C-<right>" 'paredit-forward)
+             (define-portacle-key "C-<left>" 'paredit-backward)
+             (define-portacle-key "C-'" 'paredit-meta-doublequote)
+             (define-portacle-key "C-c ]" 'paredit-forward-slurp-sexp)
+             (define-portacle-key "C-c [" 'paredit-backward-slurp-sexp)
+             (define-portacle-key "C-c C-]" 'paredit-forward-barf-sexp)
+             (define-portacle-key "C-c C-[" 'paredit-backward-barf-sexp))
 
 (use-package perspective
              :ensure t
@@ -204,9 +203,9 @@
              (persp-mode))
 
 (use-package rainbow-delimiters
-  :ensure t
-  :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+             :ensure t
+             :config
+             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (use-package restclient
   :ensure t

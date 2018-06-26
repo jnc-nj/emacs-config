@@ -210,15 +210,13 @@
 
 (use-package paredit
              :ensure t
-             :bind (("M-<right>" . paredit-forward)                    
-                    ("M-<left>" . paredit-backward) 
-                    ("C-k" . delete-region)
-                    ("C-x ." . paredit-wrap-round)
-                    ("C-x /" . paredit-meta-doublequote)
-                    ("M-]" . paredit-forward-barf-sexp)
-                    ("M-[" . paredit-backward-barf-sexp)
-                    ("M-}" . paredit-forward-slurp-sexp)
-                    ("M-{" . paredit-backward-slurp-sexp)))
+             :bind (("C-<right>" . paredit-forward)                    
+                    ("C-<left>" . paredit-backward)                    
+                    ("C-'" . paredit-meta-doublequote)
+                    ("C-c ]" . paredit-forward-slurp-sexp)
+                    ("C-c [" . paredit-backward-slurp-sexp)
+                    ("C-c C-]" . paredit-forward-barf-sexp)
+                    ("C-c C-[" . paredit-backward-barf-sexp)))
 
 (use-package perspective
              :ensure t
