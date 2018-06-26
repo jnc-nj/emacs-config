@@ -39,9 +39,7 @@
              (add-hook 'lisp-mode-hook #'aggressive-indent-mode))
 
 (use-package all-the-icons
-             :ensure t
-             :config
-             (all-the-icons-install-fonts))
+             :ensure t)
 
 (use-package anzu
              :ensure t
@@ -67,14 +65,13 @@
              (setq beacon-color "#72dfd9"))
 
 (use-package dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook)
-  (setq dashboard-banner-logo-title "あなたの愛した世界     ")
-  ;;(setq dashboard-startup-banner  "/Users/asclepius/Documents/nanjo_logo.png")
-  (setq dashboard-items '((recents . 20)
-			  (bookmarks . 5)
-			  (agenda . 5))))
+             :ensure t
+             :config
+             (dashboard-setup-startup-hook)
+             (setq dashboard-banner-logo-title "あなたの愛した世界     ")
+             (setq dashboard-items '((recents . 20)
+                                     (bookmarks . 5)
+                                     (agenda . 5))))
 
 (use-package docker
   :ensure t
@@ -224,9 +221,10 @@
              (persp-mode))
 
 (use-package rainbow-delimiters
-  :ensure t
-  :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+             :ensure t
+             :config
+             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+             (add-hook 'comint-mode-hook 'rainbow-delimiters-mode))
 
 (use-package restclient
   :ensure t
@@ -270,13 +268,15 @@
   (smex-initialize))
 
 (use-package spaceline
-  :config
-  (spaceline-spacemacs-theme)
-  (spaceline-toggle-line-column-on))
+             :ensure t
+             :config
+             (spaceline-spacemacs-theme)
+             (spaceline-toggle-line-column-on))
 
 (use-package spaceline-all-the-icons 
-  :config
-  (spaceline-all-the-icons-theme))
+             :ensure t
+             :config
+             (spaceline-all-the-icons-theme))
 
 (use-package ssh
   :ensure t

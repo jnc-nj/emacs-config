@@ -6,6 +6,7 @@
 (setq inhibit-startup-message t)
 (setq display-time-format (format-time-string "%I:%M %p"))
 (setq split-height-threshold nil)
+(setq org-agenda-files '((expand-file-name (portacle-path "../../agendas/"))))
 (setq default-directory (expand-file-name (portacle-path "../../projects/")))
 (delete-selection-mode 1)
 (display-time-mode 1)
@@ -38,9 +39,7 @@
              (add-hook 'lisp-mode-hook #'aggressive-indent-mode))
 
 (use-package all-the-icons
-             :ensure t
-             :config
-             (all-the-icons-install-fonts))
+             :ensure t)
 
 (use-package anzu
              :ensure t
@@ -60,16 +59,30 @@
   (auto-package-update-at-time "00:00"))
 
 (use-package beacon
-  :ensure t
-  :config
-  (beacon-mode 1)
-  (setq beacon-color "#72dfd9"))
+             :ensure t
+             :config
+             (beacon-mode 1)
+             (setq beacon-color "#72dfd9"))
+
+(use-package dashboard
+             :ensure t
+             :config
+             (dashboard-setup-startup-hook)
+             (setq dashboard-banner-logo-title "あなたの愛した世界     ")
+             (setq dashboard-items '((recents . 20)
+                                     (bookmarks . 5)
+                                     (agenda . 5))))
+
+(use-package dockerfile-mode
+             :ensure t
+             :config
+             (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode)))
 
 (use-package dracula-theme
-  :ensure t
-  :config
-  (load-theme 'dracula t t)
-  (enable-theme 'dracula))
+             :ensure t
+             :config
+             (load-theme 'dracula t t)
+             (enable-theme 'dracula))
 
 (use-package elfeed
              :ensure t
@@ -168,17 +181,15 @@
   (setq nyan-bar-length 24))
 
 (use-package org
-  :ensure t
-  :config
-  (setq org-startup-indented t)
-  (setq truncate-lines t))
-
-(use-package ox-md)
+             :ensure t
+             :config
+             (setq org-startup-indented t)
+             (setq truncate-lines t))
 
 (use-package page-break-lines
-  :ensure t
-  :config
-  (turn-on-page-break-lines-mode))
+             :ensure t
+             :config
+             (turn-on-page-break-lines-mode))
 
 (use-package pangu-spacing
              :ensure t
@@ -205,11 +216,12 @@
 (use-package rainbow-delimiters
              :ensure t
              :config
-             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+             (add-hook 'comint-mode-hook 'rainbow-delimiters-mode))
 
 (use-package restclient
-  :ensure t
-  :bind (("C-x r" . restclient-http-send-current)))
+             :ensure t
+             :bind (("C-x r" . restclient-http-send-current)))
 
 (use-package shell-pop
   :ensure t
@@ -237,11 +249,13 @@
              (smex-initialize))
 
 (use-package spaceline
+             :ensure t
              :config
              (spaceline-spacemacs-theme)
              (spaceline-toggle-line-column-on))
 
 (use-package spaceline-all-the-icons 
+             :ensure t
              :config
              (spaceline-all-the-icons-theme))
 
