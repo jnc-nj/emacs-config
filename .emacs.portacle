@@ -6,7 +6,6 @@
 (setq inhibit-startup-message t)
 (setq display-time-format (format-time-string "%I:%M %p"))
 (setq split-height-threshold nil)
-(setq org-agenda-files '((expand-file-name (portacle-path "../../agendas/"))))
 (setq default-directory (expand-file-name (portacle-path "../../projects/")))
 (delete-selection-mode 1)
 (display-time-mode 1)
@@ -63,15 +62,6 @@
              :config
              (beacon-mode 1)
              (setq beacon-color "#72dfd9"))
-
-(use-package dashboard
-             :ensure t
-             :config
-             (dashboard-setup-startup-hook)
-             (setq dashboard-banner-logo-title "あなたの愛した世界     ")
-             (setq dashboard-items '((recents . 20)
-                                     (bookmarks . 5)
-                                     (agenda . 5))))
 
 (use-package dockerfile-mode
              :ensure t
