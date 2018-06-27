@@ -254,9 +254,7 @@
              :config
              (smartparens-global-mode t)
              (smartparens-strict-mode t)
-             (sp-pair "<" ">")
-             (sp-pair "+" "+")
-             (sp-pair "*" "*")
+             (sp-pair "<" ">")             
              (sp-pair "'" nil :actions :rem))
 
 (use-package smex
