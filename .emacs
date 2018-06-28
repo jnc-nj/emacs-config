@@ -30,6 +30,7 @@
 (global-set-key (kbd "C--") 'undo)
 (global-set-key (kbd "C-=") 'redo)
 (global-set-key (kbd "C-f") 'set-mark-command)
+(global-set-key (kbd "C-w") 'isearch-backward)
 
 ;; config
 (use-package aggressive-indent
@@ -254,7 +255,8 @@
              :config
              (smartparens-global-mode t)
              (smartparens-strict-mode t)
-             (sp-pair "<" ">")             
+             (sp-pair "<" ">")
+             (sp-pair "（" "）")
              (sp-pair "'" nil :actions :rem))
 
 (use-package smex
@@ -277,13 +279,13 @@
              (spaceline-all-the-icons-theme))
 
 (use-package ssh
-  :ensure t
-  :config
-  (add-hook 'ssh-mode-hook
-	    (lambda ()
-	      (setq ssh-directory-tracking-mode t)
-	      (shell-dirtrack-mode t)
-	      (setq dirtrackp nil))))
+             :ensure t
+             :config
+             (add-hook 'ssh-mode-hook
+                       (lambda ()
+                         (setq ssh-directory-tracking-mode t)
+                         (shell-dirtrack-mode t)
+                         (setq dirtrackp nil))))
 
 (use-package symon
   :ensure t
