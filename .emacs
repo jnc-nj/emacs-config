@@ -30,7 +30,6 @@
 (global-set-key (kbd "C--") 'undo)
 (global-set-key (kbd "C-=") 'redo)
 (global-set-key (kbd "C-f") 'set-mark-command)
-(global-set-key (kbd "C-w") 'isearch-backward)
 
 ;; config
 (use-package aggressive-indent
