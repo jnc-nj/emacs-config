@@ -79,10 +79,10 @@
                                      (agenda . 5))))
 
 (use-package docker
-  :ensure t
-  :config
-  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-  (setq exec-path (append exec-path '("/usr/local/bin"))))
+             :ensure t 
+             :config
+             (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+             (setq exec-path (append exec-path '("/usr/local/bin"))))
 
 (use-package dockerfile-mode
   :ensure t
@@ -102,13 +102,19 @@
              (setq elfeed-feeds '("http://xkcd.com/rss.xml")))
 
 (use-package elpy
-  :ensure t
-  :config
-  (elpy-enable))
+             :ensure t
+             :config
+             (elpy-enable))
+
+(use-package exec-path-from-shell
+             :ensure t
+             :config
+             (when (memq window-system '(mac ns x))
+               (exec-path-from-shell-initialize)))
 
 (use-package expand-region
-  :ensure t
-  :bind (("C-a" . er/expand-region)))
+             :ensure t
+             :bind (("C-a" . er/expand-region)))
 
 (use-package fancy-battery
   :ensure t
