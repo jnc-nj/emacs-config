@@ -30,6 +30,11 @@
 (global-set-key (kbd "C-=") 'redo)
 (global-set-key (kbd "C-f") 'set-mark-command)
 
+;; symbols
+(defconst lisp--prettify-symbols-alist
+  '(("lambda" . ?λ) (">=" . ?≥) ("<=" . ?≤)))
+(add-hook 'lisp-mode-hook #'prettify-symbols-mode)
+
 ;; config
 (use-package aggressive-indent
              :ensure t
@@ -226,8 +231,9 @@
              (smartparens-global-mode t)
              (smartparens-strict-mode t)
              (sp-pair "<" ">")
-             (sp-pair "（" "）")
-             (sp-pair "'" nil :actions :rem))
+             (sp-pair "（" "）") 
+             (sp-pair "'" nil :actions :rem)
+             (sp-pair "`" nil :actions :rem))
 
 (use-package smex
              :ensure t

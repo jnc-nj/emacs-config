@@ -31,6 +31,11 @@
 (global-set-key (kbd "C-=") 'redo)
 (global-set-key (kbd "C-f") 'set-mark-command)
 
+;; symbols
+(defconst lisp--prettify-symbols-alist
+  '(("lambda" . ?λ) (">=" . ?≥) ("<=" . ?≤)))
+(add-hook 'lisp-mode-hook #'prettify-symbols-mode)
+
 ;; config
 (use-package aggressive-indent
              :ensure t
@@ -242,10 +247,7 @@
              :config
              (load (expand-file-name "~/.roswell/helper.el"))
              (setq inferior-lisp-program "ros -Q -L sbcl run")
-             (setq slime-contribs '(slime-fancy))
-             (defconst lisp--prettify-symbols-alist
-               '(("lambda" . ?λ) (">=" . ?≥) ("<=" . ?≤)))
-             (add-hook 'lisp-mode-hook #'prettify-symbols-mode)
+             (setq slime-contribs '(slime-fancy))             
              (load "~/.roswell/lisp/quicklisp/log4slime-setup.el")
              (global-log4slime-mode 1))
 
@@ -256,7 +258,8 @@
              (smartparens-strict-mode t)
              (sp-pair "<" ">")
              (sp-pair "（" "）")
-             (sp-pair "'" nil :actions :rem))
+             (sp-pair "'" nil :actions :rem)
+             (sp-pair "`" nil :actions :rem))
 
 (use-package smex
   :ensure t
