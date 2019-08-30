@@ -8,6 +8,8 @@
 (setq split-height-threshold nil)
 (setq org-agenda-files '("~/Documents/agendas/"))
 (setq default-directory "~/.roswell/local-projects")
+(setq tramp-default-method "ssh")
+(setq org-log-done 'time)
 (delete-selection-mode 1)
 (display-time-mode 1)
 (tool-bar-mode -1)
@@ -16,6 +18,14 @@
 (show-paren-mode 1)
 (global-visual-line-mode t)
 (blink-cursor-mode 0)
+(global-prettify-symbols-mode +1)
+
+;; setup org mode autocomplete
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  (let (org-log-done org-log-states)   ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 
 ;; reroute to emacs-china
 (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
@@ -31,20 +41,22 @@
 (global-set-key (kbd "C-=") 'redo)
 (global-set-key (kbd "C-f") 'set-mark-command)
 
-;; symbols
+;; globals
 (defconst lisp--prettify-symbols-alist
   '(("lambda" . ?λ) (">=" . ?≥) ("<=" . ?≤)))
-(add-hook 'lisp-mode-hook #'prettify-symbols-mode)
 
 ;; config
+(use-package ag
+  :ensure t)
+
 (use-package aggressive-indent
-             :ensure t
-             :config 
-             (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-             (add-hook 'lisp-mode-hook #'aggressive-indent-mode))
+  :ensure t
+  :config 
+  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+  (add-hook 'lisp-mode-hook #'aggressive-indent-mode))
 
 (use-package all-the-icons
-             :ensure t)
+  :ensure t)
 
 (use-package anzu
              :ensure t
@@ -60,6 +72,8 @@
 (use-package auto-package-update
   :ensure t
   :config
+  (setq auto-package-update-prompt-before-update t
+	auto-package-update-delete-old-versions t)
   (auto-package-update-maybe)
   (auto-package-update-at-time "00:00"))
 
@@ -74,6 +88,7 @@
              :config
              (dashboard-setup-startup-hook)
              (setq dashboard-banner-logo-title "あなたの愛した世界     ")
+	     (setq dashboard-startup-banner "/Users/asclepius/老婆.jpeg")
              (setq dashboard-items '((recents . 20)
                                      (bookmarks . 5)
                                      (agenda . 5))))
@@ -94,6 +109,13 @@
   :config
   (load-theme 'dracula t t)
   (enable-theme 'dracula))
+
+(use-package dumb-jump
+  :ensure t
+  :bind (("C-r" . dumb-jump-go)
+	 ("C-M-r" . dumb-jump-back))
+  :config
+  (dumb-jump-mode))
 
 (use-package elfeed
              :ensure t
@@ -174,10 +196,14 @@
   :bind (("C-x m" . magit-status)))
 
 (use-package markdown
+  :ensure t
   :mode (("README\\.md\\'" . gfm-mode)
 	 ("\\.md\\'" . markdown-mode)
 	 ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
+
+(use-package markdown-preview-mode
+  :ensure t)
 
 (use-package neotree
   :ensure t
@@ -217,29 +243,37 @@
   (setq pangu-spacing-real-insert-separtor t))
 
 (use-package paredit
-             :ensure t
-             :bind (("C-<right>" . paredit-forward)                    
-                    ("C-<left>" . paredit-backward)                    
-                    ("C-'" . paredit-meta-doublequote)
-                    ("C-c ]" . paredit-forward-slurp-sexp)
-                    ("C-c [" . paredit-backward-slurp-sexp)
-                    ("C-c C-]" . paredit-forward-barf-sexp)
-                    ("C-c C-[" . paredit-backward-barf-sexp)))
+  :ensure t
+  :bind (("C-<right>" . paredit-forward)                    
+         ("C-<left>" . paredit-backward)                    
+         ("C-'" . paredit-meta-doublequote)
+         ("C-c ]" . paredit-forward-slurp-sexp)
+         ("C-c [" . paredit-backward-slurp-sexp)
+         ("C-c C-]" . paredit-forward-barf-sexp)
+         ("C-c C-[" . paredit-backward-barf-sexp)))
 
 (use-package perspective
-             :ensure t
-             :config
-             (persp-mode))
+  :ensure t
+  :config
+  (persp-mode))
+
+(use-package prettify-symbols
+  :ensure t
+  :config
+  (add-hook 'lisp-mode-hook #'prettify-symbols-mode))
 
 (use-package rainbow-delimiters
-             :ensure t
-             :config
-             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-             (add-hook 'comint-mode-hook 'rainbow-delimiters-mode))
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'comint-mode-hook 'rainbow-delimiters-mode))
 
 (use-package restclient
   :ensure t
   :bind (("C-x r" . restclient-http-send-current)))
+
+(use-package rg
+  :ensure t)
 
 (use-package shell-pop
   :ensure t
@@ -253,6 +287,7 @@
              :config
              (load (expand-file-name "~/.roswell/helper.el"))
              (setq inferior-lisp-program "ros -Q -L sbcl run")
+	     (setq temporary-file-directory "~/.emacs.d/tmp/")
              (setq slime-contribs '(slime-fancy))             
              (load "~/.roswell/lisp/quicklisp/log4slime-setup.el")
              (global-log4slime-mode 1))
@@ -281,10 +316,10 @@
              (spaceline-spacemacs-theme)
              (spaceline-toggle-line-column-on))
 
-(use-package spaceline-all-the-icons 
-             :ensure t
-             :config
-             (spaceline-all-the-icons-theme))
+;;(use-package spaceline-all-the-icons 
+  ;;           :ensure t
+    ;;         :config
+      ;;       (spaceline-all-the-icons-theme))
 
 (use-package ssh
              :ensure t
@@ -349,7 +384,7 @@
  '(initial-frame-alist (quote ((fullscreen . maximized))))
  '(package-selected-packages
    (quote
-    (slime highlight-indent-guides perspective caroline-theme base16-theme avk-emacs-themes undo-tree smartparens spaceline-all-the-icons spaceline winum symon ssh spaceline-config smex smartparens-config shell-pop restclient redo+ rainbow-delimiters paredit pangu-spacing ox-md nyan-mode neotree markdown magit ido-grid-mode hlinum flx-ido fancy-battery expand-region elpy elfeed dockerfile-mode docker dashboard beacon auto-package-update anzu aggressive-indent auto-complete dracula-theme use-package))))
+    (slime prettify-symbols rg dumb-jump markdown-preview-mode markdown-mode elpygen magit zoom-window ghub exec-path-from-shell oauth2 lua-mode highlight-indent-guides perspective caroline-theme base16-theme avk-emacs-themes undo-tree smartparens spaceline-all-the-icons spaceline winum symon ssh spaceline-config smex smartparens-config shell-pop restclient redo+ rainbow-delimiters paredit pangu-spacing ox-md nyan-mode neotree markdown ido-grid-mode hlinum flx-ido fancy-battery expand-region elpy elfeed dockerfile-mode docker dashboard beacon auto-package-update anzu aggressive-indent auto-complete dracula-theme use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -357,3 +392,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(mode-line ((t (:background "#d3d7cf" :foreground "#2e3436" :box (:line-width -1 :style released-button))))))
+(put 'downcase-region 'disabled nil)
