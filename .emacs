@@ -1,15 +1,15 @@
 ;; init
 (package-initialize)
 (require 'package)
-(setq warning-minimum-level :emergency)
+;;(setq warning-minimum-level :emergency)
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-message t)
 (setq display-time-format (format-time-string "%I:%M %p"))
 (setq split-height-threshold nil)
-(setq org-agenda-files '("~/Documents/agendas/"))
 (setq default-directory "~/.roswell/local-projects")
 (setq tramp-default-method "ssh")
 (setq org-log-done 'time)
+(setq load-prefer-newer t)
 (delete-selection-mode 1)
 (display-time-mode 1)
 (tool-bar-mode -1)
@@ -19,6 +19,7 @@
 (global-visual-line-mode t)
 (blink-cursor-mode 0)
 (global-prettify-symbols-mode +1)
+(add-hook 'lisp-mode-hook #'prettify-symbols-mode)
 
 ;; setup org mode autocomplete
 (defun org-summary-todo (n-done n-not-done)
@@ -84,20 +85,27 @@
              (setq beacon-color "#72dfd9"))
 
 (use-package dashboard
-             :ensure t
-             :config
-             (dashboard-setup-startup-hook)
-             (setq dashboard-banner-logo-title "あなたの愛した世界     ")
-	     (setq dashboard-startup-banner "/Users/asclepius/老婆.jpeg")
-             (setq dashboard-items '((recents . 20)
-                                     (bookmarks . 5)
-                                     (agenda . 5))))
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  (setq dashboard-banner-logo-title "あなたの愛した世界")
+  (setq dashboard-startup-banner "/home/jacknchou/Documents/hailie.jpeg")
+  (setq dashboard-center-content t)
+  (setq dashboard-set-navigator t)
+  (setq dashboard-set-init-info t)
+  (setq dashboard-items '((recents . 20))))
+
+(use-package dimmer
+  :ensure t
+  :config
+  (dimmer-mode))
 
 (use-package docker
-             :ensure t 
-             :config
-             (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-             (setq exec-path (append exec-path '("/usr/local/bin"))))
+  :ensure t 
+  :config
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+  (setq exec-path (append exec-path '("/usr/local/bin")))
+  (setq docker-run-as-root t))
 
 (use-package dockerfile-mode
   :ensure t
@@ -143,13 +151,16 @@
   :config
   (add-hook 'after-init-hook #'fancy-battery-mode))
 
+(use-package focus
+  :ensure t)
+
 (use-package flx-ido
-             :ensure t
-             :config
-             (ido-everywhere 1)
-             (flx-ido-mode 1)
-             (setq ido-enable-flex-matching t)
-             (setq ido-use-faces nil))
+  :ensure t
+  :config
+  (ido-everywhere 1)
+  (flx-ido-mode 1)
+  (setq ido-enable-flex-matching t)
+  (setq ido-use-faces nil))
 
 (use-package ghub
              :ensure t)
@@ -196,7 +207,7 @@
   :bind (("C-x m" . magit-status)))
 
 (use-package markdown
-  :ensure t
+  ;; :ensure t
   :mode (("README\\.md\\'" . gfm-mode)
 	 ("\\.md\\'" . markdown-mode)
 	 ("\\.markdown\\'" . markdown-mode))
@@ -252,15 +263,19 @@
          ("C-c C-]" . paredit-forward-barf-sexp)
          ("C-c C-[" . paredit-backward-barf-sexp)))
 
+(use-package parrot
+  :ensure t
+  :config
+  (parrot-mode) 
+  (parrot-set-parrot-type 'default)
+  (add-hook 'after-save-hook #'parrot-start-animation) 
+  (setq parrot-num-rotations 4)
+  (parrot-party))
+
 (use-package perspective
   :ensure t
   :config
   (persp-mode))
-
-(use-package prettify-symbols
-  :ensure t
-  :config
-  (add-hook 'lisp-mode-hook #'prettify-symbols-mode))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -283,52 +298,52 @@
 	 ("<down>" . comint-next-input)))
 
 (use-package slime
-             :ensure t
-             :config
-             (load (expand-file-name "~/.roswell/helper.el"))
-             (setq inferior-lisp-program "ros -Q -L sbcl run")
-	     (setq temporary-file-directory "~/.emacs.d/tmp/")
-             (setq slime-contribs '(slime-fancy))             
-             (load "~/.roswell/lisp/quicklisp/log4slime-setup.el")
-             (global-log4slime-mode 1))
+  :ensure t
+  :config
+  (load (expand-file-name "~/.roswell/helper.el"))
+  (setq inferior-lisp-program "ros -Q -L sbcl run")  
+  (setq slime-contribs '(slime-fancy))             
+  ;;(load "~/.roswell/lisp/quicklisp/log4slime-setup.el")
+  ;;(global-log4slime-mode 1)
+  )
 
 (use-package smartparens
-             :ensure t
-             :config
-             (smartparens-global-mode t)
-             (smartparens-strict-mode t)
-             (sp-pair "<" ">")
-             (sp-pair "（" "）")
-             (sp-pair "'" nil :actions :rem)
-             (sp-pair "`" nil :actions :rem))
+  :ensure t
+  :config
+  (smartparens-global-mode t)
+  (smartparens-strict-mode t)
+  (sp-pair "<" ">")
+  (sp-pair "（" "）") 
+  (sp-pair "'" nil :actions :rem)
+  (sp-pair "`" nil :actions :rem))
 
 (use-package smex
   :ensure t
   :bind (("M-x" . smex)
-	 ("M-X" . smex-major-mode-commands)
-	 ("C-c M-x" . execute-extended-command))
+	 ("M-X" . smex-major-mode-commands))
   :config
   (smex-initialize))
 
 (use-package spaceline
-             :ensure t
-             :config
-             (spaceline-spacemacs-theme)
-             (spaceline-toggle-line-column-on))
+  :ensure t
+  :config
+  (spaceline-spacemacs-theme)
+  (spaceline-toggle-line-column-on))
 
 ;;(use-package spaceline-all-the-icons 
-  ;;           :ensure t
-    ;;         :config
-      ;;       (spaceline-all-the-icons-theme))
+;;:ensure t
+;;:config
+;;(spaceline-all-the-icons-theme)
+;;(spaceline-toggle-all-the-icons-projectile))
 
 (use-package ssh
-             :ensure t
-             :config
-             (add-hook 'ssh-mode-hook
-                       (lambda ()
-                         (setq ssh-directory-tracking-mode t)
-                         (shell-dirtrack-mode t)
-                         (setq dirtrackp nil))))
+  :ensure t
+  :config
+  (add-hook 'ssh-mode-hook
+	    (lambda ()
+	      (setq ssh-directory-tracking-mode t)
+	      (shell-dirtrack-mode t)
+	      (setq dirtrackp nil))))
 
 (use-package symon
   :ensure t
@@ -381,10 +396,20 @@
  '(custom-safe-themes
    (quote
     ("7559ac0083d1f08a46f65920303f970898a3d80f05905d01e81d49bb4c7f9e39" "b79104a19e95f10698badb711bd4ab25565af3ffcf18fa7d3c7db4de7d759ac8" "c968804189e0fc963c641f5c9ad64bca431d41af2fb7e1d01a2a6666376f819c" "e1498b2416922aa561076edc5c9b0ad7b34d8ff849f335c13364c8f4276904f0" "08f5da7e1f5064a2917af94f0dab946adfb25665b25450168ded749ec78a1145" "cde05ed51346d6925d29311fb131511115ae7612764297077ca1b61371e6b047" "c30d153e623dfe32184857790a0cad243b979e8b1104e057c4a6ffe2210856f7" "a4df5d4a4c343b2712a8ed16bc1488807cd71b25e3108e648d4a26b02bc990b3" default)))
+ '(dashboard-set-file-icons t)
+ '(dashboard-set-heading-icons t)
+ '(docker-run-as-root t)
+ '(elfeed-feeds
+   (quote
+    ("https://hnrss.org/frontpage" "http://xkcd.com/rss.xml")))
  '(initial-frame-alist (quote ((fullscreen . maximized))))
  '(package-selected-packages
    (quote
-    (slime prettify-symbols rg dumb-jump markdown-preview-mode markdown-mode elpygen magit zoom-window ghub exec-path-from-shell oauth2 lua-mode highlight-indent-guides perspective caroline-theme base16-theme avk-emacs-themes undo-tree smartparens spaceline-all-the-icons spaceline winum symon ssh spaceline-config smex smartparens-config shell-pop restclient redo+ rainbow-delimiters paredit pangu-spacing ox-md nyan-mode neotree markdown ido-grid-mode hlinum flx-ido fancy-battery expand-region elpy elfeed dockerfile-mode docker dashboard beacon auto-package-update anzu aggressive-indent auto-complete dracula-theme use-package))))
+    (parrot netease-music markdown-preview-eww slime prettify-symbols rg dumb-jump markdown-preview-mode markdown-mode elpygen magit zoom-window ghub exec-path-from-shell oauth2 lua-mode highlight-indent-guides perspective caroline-theme base16-theme avk-emacs-themes undo-tree smartparens winum symon ssh spaceline-config smex smartparens-config shell-pop restclient redo+ rainbow-delimiters paredit pangu-spacing ox-md nyan-mode neotree markdown ido-grid-mode hlinum flx-ido fancy-battery expand-region elpy elfeed dockerfile-mode docker dashboard beacon auto-package-update anzu aggressive-indent auto-complete dracula-theme use-package)))
+ '(parrot-animate-parrot t)
+ '(parrot-spaces-after 1)
+ '(powerline-height 10)
+ '(spaceline-all-the-icons-flycheck-alternate t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
